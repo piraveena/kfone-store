@@ -1,8 +1,8 @@
 # kfone-store
 
 This kfone has two components:
-1. kfone-app: Front facing application
-2. kfone-backend: Server that has APIs required by the front facing application
+1. kfone-app: Front facing application : [https://kfone-app.fly.dev/](https://kfone-app.fly.dev/)
+2. kfone-backend: Server that has APIs required by the front facing application : [https://spring-resource-server.fly.dev/](https://spring-resource-server.fly.dev/)
 
 Both kfone-app and kfone-backend are spring-boot applications.
 
