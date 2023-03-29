@@ -64,6 +64,7 @@ class AppController {
 
     @GetMapping("/index")
     public String getHomePage(Model model, Authentication authentication) {
+        List<Product> products = productService.getProducts();
 
         logger.info("Rendering index page");
         User user = userService.getUser(authentication);
@@ -73,7 +74,6 @@ class AppController {
         logger.info("User....: " + user);
         model.addAttribute("user", user);
 
-        List<Product> products = productService.getProducts();
         model.addAttribute("productList", products);
         return "index";
     }

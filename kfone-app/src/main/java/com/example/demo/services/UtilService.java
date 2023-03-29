@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.LoginException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,9 @@ public class UtilService {
 
     @Value("${asgardeo.scim.me.endpoint}")
     private String scimMeEndpoint;
+
+    @Value("${asgardeo.app.userinfo.endpoint}")
+    private String userInfoEndpoint;
 
 
     @Autowired
@@ -95,5 +99,25 @@ public class UtilService {
             return new JSONObject(response);
         }
         return null;
+    }
+
+    public JSONObject getUserInfo(String accessToken) throws LoginException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(accessToken);
+        logger.info(accessToken);
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        ResponseEntity<String> restApi = restTemplate.exchange(userInfoEndpoint, HttpMethod.GET, entity, String.class);
+        int statusCode = restApi.getStatusCode().value();
+        logger.info(statusCode + "");
+        if (statusCode == 200) {
+            String response = restApi.getBody();
+            logger.info(response);
+            return new JSONObject(response);
+        } else {
+            logger.info("Error occurred while calling the API");
+            throw new LoginException("Error occurred while calling the API");
+        }
     }
 }

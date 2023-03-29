@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
+import com.example.demo.exceptions.LoginException;
 import com.example.demo.models.User;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,22 +26,22 @@ public class UserService {
             DefaultOidcUser userDetails = (DefaultOidcUser) authentication.getPrincipal();
             logger.info("User details: " + userDetails);
 
-            user.setId(userDetails.getClaim("id"));
-            user.setUsername(userDetails.getClaim("username"));
-            String fullName = "";
-            if (null != userDetails.getClaim("given_name")) {
-                user.setFirstName(userDetails.getClaim("given_name"));
-                fullName += userDetails.getClaim("given_name");
-            }
-            if (null != userDetails.getClaim("family_name")) {
-                user.setLastName(userDetails.getClaim("family_name"));
-                fullName += " " + userDetails.getClaim("family_name");
-            }
-            user.setFullName(fullName);
             String accessToken = utilService.getAccessToken((OAuth2AuthenticationToken) authentication);
             System.out.println("accessToken: " + accessToken);
             if (accessToken == null) {
                 return null;
+            }
+            JSONObject userInfo = null;
+            try {
+                userInfo = utilService.getUserInfo(accessToken);
+                logger.info("User info: " + userInfo.toString());
+            } catch (LoginException e) {
+                return null;
+            }
+            if (userInfo != null) {
+                user.setUsername(userInfo.get("username").toString());
+                String fullName2 = userInfo.get("given_name") + " " + userInfo.get("family_name");
+                user.setFullName(fullName2);
             }
             boolean emailVerified = utilService.getEmailVerifiedClaim(authentication, accessToken);
             logger.info("Email verified: " + emailVerified);

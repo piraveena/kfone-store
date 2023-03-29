@@ -142,8 +142,41 @@ this.clientRegistrationRepository);
 ```
 
 ## Invoke Asgardeo self-service APIs
+To invoke Asgardeo self-service APIs, you need to get an access token. You can get an access token by following the steps mentioned in the following link:
+https://wso2.com/asgardeo/docs/apis/authentication/#get-an-access-token
+
+Note: To invoke the self-service APIs, the application you are using should be registered as a management application in Asgardeo.
 
 ## How to get user profile information
+We utilized the `scim2/Me` endpoint of Asgardeo to get the user profile information. It is also part of the self-service APIs.
+You can find more information about these endpoints in the following link:
+https://wso2.com/asgardeo/docs/apis/scim2/#/paths/Me/get
+
+1. We used the GET endpoint to fetch the user information from the Asgardeo server.
+2. We used the PATCH endpoint to update the user information in the Asgardeo server.
+
+Also we have utilized the `/userinfo` endpoint of the management application to get the user profile information. Find the implementation below.
+```java
+public JSONObject getUserInfo(String accessToken) throws LoginException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(accessToken);
+        logger.info(accessToken);
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        ResponseEntity<String> restApi = restTemplate.exchange(userInfoEndpoint, HttpMethod.GET, entity, String.class);
+        int statusCode = restApi.getStatusCode().value();
+        logger.info(statusCode + "");
+        if (statusCode == 200) {
+            String response = restApi.getBody();
+            logger.info(response);
+            return new JSONObject(response);
+        } else {
+            logger.info("Error occurred while calling the API");
+            throw new LoginException("Error occurred while calling the API");
+        }
+    }
+```
 
 ## Logged in session
 
