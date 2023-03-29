@@ -1,10 +1,17 @@
 package com.example.demo.models;
 
 public class Product {
+    private String id;
     private String name;
     private int price;
     private String description;
     private String manufacturer;
+
+    private String image;
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -22,7 +29,11 @@ public class Product {
         return manufacturer;
     }
 
+    public String getImage() {
+        return image;
+    }
+
     public String toString() {
-        return "Product: " + name + ", " + price + ", " + description + ", " + manufacturer;
+        return "Product: " + name + ", " + price + ", " + description + ", " + manufacturer + ", " + image;
     }
 }

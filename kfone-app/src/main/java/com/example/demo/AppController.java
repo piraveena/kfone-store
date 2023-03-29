@@ -4,6 +4,7 @@ import com.example.demo.exceptions.LoginException;
 import com.example.demo.models.Product;
 import com.example.demo.models.User;
 import com.example.demo.services.ProductService;
+import com.example.demo.services.UserService;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,6 +32,7 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +52,8 @@ class AppController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private UserService userService;
 
     @Value("${asgardeo.scim.me.endpoint}")
     private String scimMeEndpoint;
@@ -60,42 +64,16 @@ class AppController {
 
     @GetMapping("/index")
     public String getHomePage(Model model, Authentication authentication) {
-        List<Product> products = productService.getProducts();
 
         logger.info("Rendering index page");
-        if (authentication == null) {
-            model.addAttribute("isAuthenticated", false);
-        } else {
-            model.addAttribute("isAuthenticated", authentication.isAuthenticated());
-            DefaultOidcUser userDetails = (DefaultOidcUser) authentication.getPrincipal();
-            model.addAttribute("username", userDetails.getClaim("username"));
-            String fullName = "";
-            if (null != userDetails.getClaim("given_name")) {
-                fullName += userDetails.getClaim("given_name");
-            }
-            if (null != userDetails.getClaim("family_name")) {
-                fullName += " " + userDetails.getClaim("family_name");
-            }
-            model.addAttribute("fullName", fullName);
-            String accessToken = getAccessToken((OAuth2AuthenticationToken) authentication);
-            if (accessToken == null) {
-                return "redirect:/login";
-            }
-            boolean emailVerified = false;
-            try {
-                emailVerified = getEmailVerifiedClaim(authentication, accessToken);
-            } catch (LoginException e) {
-                return "redirect:/login";
-            }
-            logger.info("Email verified: " + emailVerified);
-            model.addAttribute("emailVerified", emailVerified);
-            try {
-                model.addAttribute("tier", getUserTier(authentication, accessToken));
-            } catch (LoginException e) {
-                return "redirect:/login";
-            }
-
+        User user = userService.getUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
         }
+        logger.info("User....: " + user);
+        model.addAttribute("user", user);
+
+        List<Product> products = productService.getProducts();
         model.addAttribute("productList", products);
         return "index";
     }
@@ -181,7 +159,23 @@ class AppController {
         return "redirect:/profile";
     }
 
-    @RequestMapping({"/add-to-cart", "/product"})
+    @GetMapping("/product/{id}")
+    public String getProductViewPage(@PathVariable String id, Model model, Authentication authentication) {
+
+        logger.info("Rendering product page " + id);
+        User user = userService.getUser(authentication);
+        if (user == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("user", user);
+
+        Product product = productService.getProduct(id);
+        logger.info("Product: " + product);
+        model.addAttribute("product", product);
+        return "product";
+    }
+
+    @RequestMapping({"/add-to-cart"})
     public String getProductViewPage(Model model, Authentication authentication) {
 
         int statusCode = productService.addProduct(getAccessToken((OAuth2AuthenticationToken) authentication));

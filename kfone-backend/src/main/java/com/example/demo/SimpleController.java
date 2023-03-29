@@ -26,6 +26,7 @@ public class SimpleController {
 
     @GetMapping("/products/{id}")
     public ResponseEntity<Device> getDevice(@PathVariable String id) {
+        logger.info("id: " + id);
 
         Device device = ProductDB.getInstance().getDevice(id);
         return ResponseEntity.ok(device);

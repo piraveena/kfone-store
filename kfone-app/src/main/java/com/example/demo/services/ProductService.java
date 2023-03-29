@@ -28,12 +28,20 @@ public class ProductService {
 
     public List<Product> getProducts() {
         String url = resourceServerUri + "/products";
+        RestTemplate restTemplate = new RestTemplate();
         Product[] products = restTemplate.getForObject(url, Product[].class);
 
         if (products == null) {
             return List.of();
         }
         return Arrays.asList(products);
+    }
+
+    public Product getProduct(String id) {
+        String url = resourceServerUri + "/products/" + id;
+        RestTemplate restTemplate = new RestTemplate();
+
+        return restTemplate.getForObject(url, Product.class);
     }
 
     public int addProduct(String accessToken) {
