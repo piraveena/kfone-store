@@ -26,18 +26,6 @@ public class UserService {
             DefaultOidcUser userDetails = (DefaultOidcUser) authentication.getPrincipal();
             logger.info("User details: " + userDetails);
 
-            user.setId(userDetails.getClaim("id"));
-            user.setUsername(userDetails.getClaim("username"));
-            String fullName = "";
-            if (null != userDetails.getClaim("given_name")) {
-                user.setFirstName(userDetails.getClaim("given_name"));
-                fullName += userDetails.getClaim("given_name");
-            }
-            if (null != userDetails.getClaim("family_name")) {
-                user.setLastName(userDetails.getClaim("family_name"));
-                fullName += " " + userDetails.getClaim("family_name");
-            }
-            user.setFullName(fullName);
             String accessToken = utilService.getAccessToken((OAuth2AuthenticationToken) authentication);
             System.out.println("accessToken: " + accessToken);
             if (accessToken == null) {
