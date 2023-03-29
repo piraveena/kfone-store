@@ -6,6 +6,8 @@ This kfone has two components:
 
 Both kfone-app and kfone-backend are spring-boot applications.
 
+## SolutionArchitecture
+![](assets/architecture.png)
 ## Kfone app
 kfone-app is a web application, and it uses the following technologies:
 1. Spring Boot and java
@@ -14,7 +16,7 @@ kfone-app is a web application, and it uses the following technologies:
 4. embedded-tomcat
 
 ## Kfone backend
-To see how to run the backend app,  and it uses the following technologies:
+To see how to run the backend app, refer: [kfone-backend/README.md](kfone-backend/README.md) , and it uses the following technologies:
 1. Spring Boot and java
 2. spring-boot-starter-oauth2-resource-server
    
