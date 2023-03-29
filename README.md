@@ -18,4 +18,5 @@ kfone-app is a web application, and it uses the following technologies:
 To see how to run the backend app, refer: [kfone-backend/README.md](kfone-backend/README.md)
 1. Spring Boot and java
 2. spring-boot-starter-oauth2-resource-server
-   Server is hosted using fly.io
+
+3. Backend Server is hosted using fly.io
