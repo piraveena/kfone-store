@@ -54,6 +54,8 @@ class AppController {
     @Value("${asgardeo.scim.me.endpoint}")
     private String scimMeEndpoint;
 
+    @Value("${asgardeo.app.userinfo.endpoint}")
+    private String userInfoEndpoint;
 
     @Autowired
     RestTemplate restTemplate;
@@ -80,6 +82,20 @@ class AppController {
             String accessToken = getAccessToken((OAuth2AuthenticationToken) authentication);
             if (accessToken == null) {
                 return "redirect:/login";
+            }
+            JSONObject userInfo = null;
+            try {
+                userInfo = getUserInfo(accessToken);
+                logger.info("User info: " + userInfo.toString());
+            } catch (LoginException e) {
+                return "redirect:/login";
+            }
+            if (userInfo != null) {
+                model.addAttribute("username", userInfo.get("username"));
+                String fullName2 = "";
+                fullName2 += userInfo.get("given_name");
+                fullName2 += " " + userInfo.get("family_name");
+                model.addAttribute("fullName", fullName2);
             }
             boolean emailVerified = false;
             try {
@@ -315,5 +331,25 @@ class AppController {
         body.put("Operations", operations);
 
         return body;
+    }
+
+    private JSONObject getUserInfo(String accessToken) throws LoginException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.setBearerAuth(accessToken);
+        logger.info(accessToken);
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+        ResponseEntity<String> restApi = restTemplate.exchange(userInfoEndpoint, HttpMethod.GET, entity, String.class);
+        int statusCode = restApi.getStatusCode().value();
+        logger.info(statusCode + "");
+        if (statusCode == 200) {
+            String response = restApi.getBody();
+            logger.info(response);
+            return new JSONObject(response);
+        } else {
+            logger.info("Error occurred while calling the API");
+            throw new LoginException("Error occurred while calling the API");
+        }
     }
 }
