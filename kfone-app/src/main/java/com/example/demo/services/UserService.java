@@ -40,9 +40,7 @@ public class UserService {
             }
             if (userInfo != null) {
                 user.setUsername(userInfo.get("username").toString());
-                String fullName2 = "";
-                fullName2 += userInfo.get("given_name");
-                fullName2 += " " + userInfo.get("family_name");
+                String fullName2 = userInfo.get("given_name") + " " + userInfo.get("family_name");
                 user.setFullName(fullName2);
             }
             boolean emailVerified = utilService.getEmailVerifiedClaim(authentication, accessToken);
