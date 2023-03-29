@@ -92,7 +92,7 @@ public String getLoginPage(Model model) {
 }
 ```
 
-## logout (sign-in, sign-out)
+## Logout
 
 1. Configure a ConfigSecurity class by extending WebSecurityConfigurerAdapter.
 
