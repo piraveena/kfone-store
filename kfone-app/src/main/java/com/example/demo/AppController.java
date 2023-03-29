@@ -118,6 +118,7 @@ class AppController {
         logger.info(new JSONArray(response.getJSONArray("phoneNumbers").toString()).getJSONObject(0).get("value").toString());
 
         User user = new User();
+        user.setAuthenticated(authentication.isAuthenticated());
         user.setUsername(userDetails.getClaim("username"));
         if (userDetails.getClaim("address") != null) {
             user.setCountry(new JSONObject(userDetails.getClaim("address").toString()).get("country").toString());
