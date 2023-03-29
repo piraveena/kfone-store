@@ -60,9 +60,86 @@ You can try out our sample application hosted in the following URL:
 
 # How to integrate a spring-boot application with Asgardeo
 
+## Before you start
+Following dependencies need to be added into the `pom.xml` file:
+1. spring-boot-starter-oauth2-client
+2. spring-boot-starter-security
+3. spring-boot-starter-web
+4. spring-boot-starter-thymeleaf
+
+
 ## Login
 
+Once you add the above dependencies, Add below properties in the `application.properties` file. It will automatically integrate login capabilities to your app.
+```
+spring.security.oauth2.client.registration.asgardeo.client-name=Asgardeo
+spring.security.oauth2.client.registration.asgardeo.client-id=${client-id}
+spring.security.oauth2.client.registration.asgardeo.client-secret=${client-secret}
+spring.security.oauth2.client.registration.asgardeo.redirect-uri={baseUrl}/login/oauth2/code/asgardeo
+spring.security.oauth2.client.registration.asgardeo.authorization-grant-type=authorization_code
+spring.security.oauth2.client.registration.asgardeo.scope=openid, address, phone, profile, internal_login
+```
+
+Spring Boot has a default login page. All the endpoints of the application are secured except the `/login` page. You can customize your login page or redirect to Asgardeo login page without showing any login page in your app.
+
+### Remove the default “/login” page and redirect directly to Asgardeo login page
+1. Add below properties in the controller class.
+
+```java
+@GetMapping("/login")
+public String getLoginPage(Model model) {
+    return "redirect:/oauth2/authorization/wso2";
+}
+```
+
 ## logout (sign-in, sign-out)
+
+1. Configure a ConfigSecurity class by extending WebSecurityConfigurerAdapter.
+
+```java
+@EnableWebSecurity
+public class ConfigSecurity extends WebSecurityConfigurerAdapter {
+
+protected void configure(HttpSecurity http) throws Exception {
+
+       http.authorizeRequests()
+                    .antMatchers("/login")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+               .oauth2Login()
+                    .loginPage("/login")
+               .and()
+               .logout()
+                    .logoutSuccessHandler(oidcLogoutSuccessHandler());
+
+}
+
+@Autowired
+private ClientRegistrationRepository clientRegistrationRepository;
+
+private LogoutSuccessHandler oidcLogoutSuccessHandler() {
+OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
+new OidcClientInitiatedLogoutSuccessHandler(
+this.clientRegistrationRepository);
+
+       oidcLogoutSuccessHandler.setPostLogoutRedirectUri(
+               URI.create("http://localhost:8080/")); //Need to give the post-rediret-uri here
+
+       return oidcLogoutSuccessHandler;
+}
+}
+```
+
+2. Add the /logout redirection when user clicks the Logout button.
+
+```html
+<div style="float:right">
+   <form method="post" th:action="@{/logout}"  class="navbar-form navbar-right">
+       <button id="logout-button" type="submit" class="btn btn-danger">Logout</button>
+   </form>
+</div>
+```
 
 ## Invoke Asgardeo self-service APIs
 
@@ -70,10 +147,5 @@ You can try out our sample application hosted in the following URL:
 
 ## Logged in session
 
-## How to maintain, state, session, session timeouts
-
-## Securely store and use credentials in the application side
-
-## How to deploy/host applications
-
 ## How to manage configuration
+Configurations can be managed by using `application.properties` file or `application.yml` file which is shipped with spring-boot apps.
