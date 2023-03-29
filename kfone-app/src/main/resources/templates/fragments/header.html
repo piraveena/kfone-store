@@ -34,7 +34,7 @@
             </div>
             <a th:if="${!user.isAuthenticated}" href="/login"
                class="ml-2 text-md font-medium text-blue-600 dark:text-blue-500 hover:underline">
-                Login
+                Login/Signup
             </a>
             <form th:if="${user.isAuthenticated}" method="post" th:action="@{/logout}" class="navbar-form navbar-right">
                 <button id="logout-button" type="submit"
