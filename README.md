@@ -1,4 +1,4 @@
-# kfone-store
+# KFone store
 
 This kfone has two components:
 1. kfone-app: Front facing application : [https://kfone-app.fly.dev/](https://kfone-app.fly.dev/)
