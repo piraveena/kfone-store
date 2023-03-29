@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Products api
+  version: 1.0.0
+servers:
+  - url: localhost://
+paths:
+  /products:
+    get:
+      tags:
+        - default
+      summary: get
+      responses:
+        '200':
+          description: OK
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/Devices'
+
+components:
+    schemas:
+        Devices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Device'
+        Device:
+          type: object
+          properties:
+              name:
+                type: string
+              description:
+                type: string
+              price:
+                type: number
+              manufacturer:
+                type: string
