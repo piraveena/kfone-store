@@ -6,7 +6,7 @@ This kfone has two components:
 
 Both kfone-app and kfone-backend are spring-boot applications.
 
-## SolutionArchitecture
+## Solution Architecture
 ![](assets/architecture.png)
 ## Kfone app
 kfone-app is a web application, and it uses the following technologies:
