@@ -65,8 +65,20 @@ You can try out our sample application hosted in the following URL:
 ## logout (sign-in, sign-out)
 
 ## Invoke Asgardeo self-service APIs
+To invoke Asgardeo self-service APIs, you need to get an access token. You can get an access token by following the steps mentioned in the following link:
+https://wso2.com/asgardeo/docs/apis/authentication/#get-an-access-token
+
+Note: To invoke the self-service APIs, the application you are using should be registered as a management application in Asgardeo.
 
 ## How to get user profile information
+We utilized the `scim2/Me` endpoint of Asgardeo to get the user profile information. It is also part of the self-service APIs.
+You can find more information about these endpoints in the following link:
+https://wso2.com/asgardeo/docs/apis/scim2/#/paths/Me/get
+
+1. We used the GET endpoint to fetch the user information from the Asgardeo server.
+2. We used the PATCH endpoint to update the user information in the Asgardeo server.
+
+Also we have utilized the `/userinfo` endpoint of the management application to get the user profile information.
 
 ## Logged in session
 
@@ -77,3 +89,6 @@ You can try out our sample application hosted in the following URL:
 ## How to deploy/host applications
 
 ## How to manage configuration
+All the configuration related to the application is stored in the `application.properties` file. You can change the configuration values based on your requirements.
+The configuration values are read from the `application.properties` file at the application startup. Please find our sample configuration file in the following link:
+https://github.com/piraveena/kfone-store/blob/main/kfone-app/src/main/resources/application.properties
