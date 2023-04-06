@@ -28,5 +28,3 @@ Refer: [kfone-backend/README.md](backend/README.md) for more details.
 2. To see how to run the app, refer: [kfone-app/README.md](app/README.md)
 3. To see how to run the backend server refer: [kfone-backend/README.md](backend/README.md)
 
-# License
-Licenses this source under the Apache License, Version 2.0 [LICENSE](../LICENSE), You may not use this file except in compliance with the License.
