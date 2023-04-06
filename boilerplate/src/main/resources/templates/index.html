@@ -16,16 +16,6 @@
     <p> </p>
   </div>
   <div>
-    Claims found in the ID token
-    <div><span style="font-weight:bold" th:text="${IDTokenClaims}"></span></div>
-    <p> </p>
-  </div>
-  <div>
-    Access token:
-    <span style="font-weight:bold" th:text="${accessToken}"></span>
-    <p> </p>
-  </div>
-  <div>
     Response from SCIM API:
     <div><span style="font-weight:bold" th:text="${scimMe}"></span></div>
     <p> </p>
@@ -35,7 +25,7 @@
     <span style="font-weight:bold" th:text="${resourceServerAPIStatusCode}"></span>
     <p> </p>
   </div>
-  <form th:if="${isAuthenticated}" method="post" th:action="@{/logout}" class="navbar-form navbar-right">
+  <form  method="post" th:action="@{/logout}" class="navbar-form navbar-right">
     <button id="logout-button" type="submit"
             class="ml-2 text-md font-medium text-blue-600 dark:text-blue-500 hover:underline">
       Logout

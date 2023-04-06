@@ -33,10 +33,3 @@ A resource server application has been already hosted with fly.io. You can use y
 ```
 resource-server-url=<add your resource server url>
 ```
-
-## Run the application locally
-Since, the spring-boot application contains Spring devTools as a dependency, you can run the application easily with the help of the embedded tomcat server.
-1. Clone this project
-2. Change the `application.properties` file as mentioned in the above section
-3. In the terminal, run `mvn clean spring-boot:run`
-4. In the browser, go to `http://localhost:8080/index`

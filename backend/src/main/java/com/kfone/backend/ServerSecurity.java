@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.kfone.backend;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;

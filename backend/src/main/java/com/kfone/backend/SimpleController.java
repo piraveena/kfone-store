@@ -1,8 +1,8 @@
-package com.example.demo;
+package com.kfone.backend;
 
-import com.example.demo.db.ProductDB;
-import com.example.demo.model.AddDeviceRequest;
-import com.example.demo.model.Device;
+import com.kfone.backend.db.ProductDB;
+import com.kfone.backend.model.AddDeviceRequest;
+import com.kfone.backend.model.Device;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

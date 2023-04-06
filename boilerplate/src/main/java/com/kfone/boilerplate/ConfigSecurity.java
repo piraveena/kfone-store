@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.kfone.boilerplate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @EnableWebSecurity
 public class ConfigSecurity extends WebSecurityConfigurerAdapter {
 
-    @Value( "${spring.security.oauth2.client.registration.asgardeo.post-logout-redirect-uri}" )
+    @Value("${spring.security.oauth2.client.registration.asgardeo.post-logout-redirect-uri}")
     private String postLogoutRedirectUri;
 
     @Autowired
@@ -26,21 +26,21 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
 
         logger.info("Configuring security");
         http.authorizeRequests()
-                .antMatchers( "/index", "/product/{id}", "/login", "/")
+                .antMatchers("/index", "/product/{id}", "/login", "/") // Add endpoints that need to be unsecured.
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .oauth2Login().loginPage("/login")
+                .oauth2Login().loginPage("/login")// You login page URL
                 .and().logout()
                 .logoutSuccessHandler(oidcLogoutSuccessHandler());
 
     }
 
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
-        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
-                new OidcClientInitiatedLogoutSuccessHandler(
-                        this.clientRegistrationRepository);
+
+        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler = new OidcClientInitiatedLogoutSuccessHandler(
+                this.clientRegistrationRepository);
 
         oidcLogoutSuccessHandler.setPostLogoutRedirectUri(postLogoutRedirectUri);
         return oidcLogoutSuccessHandler;

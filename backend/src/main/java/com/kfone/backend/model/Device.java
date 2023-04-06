@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.kfone.backend.model;
 
 public class Device {
     private String id;
