@@ -1,6 +1,6 @@
-package com.example.demo.db;
+package com.kfone.backend.db;
 
-import com.example.demo.model.Device;
+import com.kfone.backend.model.Device;
 
 import java.util.HashMap;
 import java.util.Map;

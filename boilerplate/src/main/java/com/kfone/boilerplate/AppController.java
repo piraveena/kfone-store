@@ -1,6 +1,7 @@
-package com.example.demo;
+package com.kfone.boilerplate;
 
 import java.util.UUID;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,11 +51,13 @@ class AppController {
     public String getHomePage(Model model, Authentication authentication) {
 
         if (authentication == null) {
-            return "redirect:/login";
+            model.addAttribute("isAuthenticated", false);
+            return "index";
         }
 
         String email = getEmailFromIdToken(authentication);
         model.addAttribute("userName", email);
+        model.addAttribute("isAuthenticated", authentication.isAuthenticated());
 
         String accessToken = getAccessToken((OAuth2AuthenticationToken) authentication);
         logger.info("Access token: " + accessToken);
@@ -71,11 +74,11 @@ class AppController {
         return "index";
     }
 
-    private String getEmailFromIdToken(Authentication authentication){
+    private String getEmailFromIdToken(Authentication authentication) {
 
         logger.info("Getting email from id token");
         DefaultOidcUser userDetails = (DefaultOidcUser) authentication.getPrincipal();
-        return (String)userDetails.getClaims().get("email");
+        return (String) userDetails.getClaims().get("email");
     }
 
     /**
@@ -113,10 +116,10 @@ class AppController {
 
         JSONObject response = null;
         try {
-            response =  apiService.callGetAPI(scimMeEndpoint, accessToken);
+            response = apiService.callGetAPI(scimMeEndpoint, accessToken);
             model.addAttribute("scimMe", response.toString());
         } catch (Exception e) {
-            logger.error("Error occurred while calling the API" , e);
+            logger.error("Error occurred while calling the API", e);
         }
     }
 
@@ -126,19 +129,18 @@ class AppController {
      * @param accessToken Access token.
      * @param model       Model.
      */
-    private void resourceServerAPICall (String accessToken, Model model) {
+    private void resourceServerAPICall(String accessToken, Model model) {
 
         String url = resourceServerUri + "/api/addProducts";
         try {
             JSONObject response = apiService.callPOSTAPI(url, accessToken, getRequestBody().toString());
             model.addAttribute("resourceServerAPIStatusCode", response.toString());
-            logger.info(response.toString());
         } catch (Exception e) {
-            logger.error("Error occurred while calling the API" , e);
+            logger.error("Error occurred while calling the API", e);
         }
     }
 
-    private JSONObject getRequestBody(){
+    private JSONObject getRequestBody() {
 
         JSONObject object = new JSONObject();
         object.put("name", "test");
