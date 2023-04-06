@@ -1,5 +1,5 @@
 # Register application
-1. Follow this Asgardeo documentation to register an application: https://wso2.com/asgardeo/docs/guides/applications/register-oidc-web-app/#register-the-app
+1. Follow this [Asgardeo documentation](https://wso2.com/asgardeo/docs/guides/applications/register-oidc-web-app/#register-the-app) to register an OIDC Web application. 
 2. Configure Authorized redirect URLs based on your app's host name and port :
 ```
    Authorized redirect URLs <hostname>/login/oauth2/code/asgardeo, <hostname>/index
@@ -8,6 +8,7 @@ Example value if the app is running on `localhost:8080`:
 ```
    Authorized redirect URLs http://localhost:8080/login/oauth2/code/asgardeo, http://localhost:8080/index
 ```
+3. Get client ID and client secret of the application.
 
 # Pre-requisites
 1. Java 11
@@ -56,4 +57,5 @@ Option2 :  Running as a executable jar
 5. Change the `Authorized redirect URLs` of the application based on the hostname.
 
 # How to integrate a spring-boot application with Asgardeo
+
 If you want to know how to integrate your spring-boot application with Asgardeo, Refer [this](how-to-integrate.md)
