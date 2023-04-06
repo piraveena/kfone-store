@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, WSO2 LLC. (https://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2023, WSO2 LLC. (https://www.wso2.com).
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,22 +15,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.kfone.boilerplate;
+package com.kfone.backend.model;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
+public class AddDeviceRequest {
+    private String name;
+    private String id;
 
-@SpringBootApplication
-public class DemoApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+    public AddDeviceRequest(String name, String id) {
+        this.name = name;
+        this.id = id;
     }
 
-    @Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
+    //Getters
+    public String getName() {
+
+        return name;
     }
+
 }

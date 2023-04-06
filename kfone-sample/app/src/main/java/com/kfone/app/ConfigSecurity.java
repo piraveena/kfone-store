@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023, WSO2 LLC. (https://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2023, WSO2 LLC. (https://www.wso2.com).
  *
  * WSO2 LLC. licenses this file to you under the Apache License,
  * Version 2.0 (the "License"); you may not use this file except
@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.kfone.boilerplate;
+package com.kfone.app;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +31,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @EnableWebSecurity
 public class ConfigSecurity extends WebSecurityConfigurerAdapter {
 
-    @Value("${spring.security.oauth2.client.registration.asgardeo.post-logout-redirect-uri}")
+    @Value( "${spring.security.oauth2.client.registration.asgardeo.post-logout-redirect-uri}" )
     private String postLogoutRedirectUri;
 
     @Autowired
@@ -43,21 +43,21 @@ public class ConfigSecurity extends WebSecurityConfigurerAdapter {
 
         logger.info("Configuring security");
         http.authorizeRequests()
-                .antMatchers("/index", "/product/{id}", "/login", "/") // Add endpoints that need to be unsecured.
+                .antMatchers( "/index", "/product/{id}", "/login", "/")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .oauth2Login().loginPage("/login")// You login page URL
+                .oauth2Login().loginPage("/login")
                 .and().logout()
                 .logoutSuccessHandler(oidcLogoutSuccessHandler());
 
     }
 
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
-
-        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler = new OidcClientInitiatedLogoutSuccessHandler(
-                this.clientRegistrationRepository);
+        OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
+                new OidcClientInitiatedLogoutSuccessHandler(
+                        this.clientRegistrationRepository);
 
         oidcLogoutSuccessHandler.setPostLogoutRedirectUri(postLogoutRedirectUri);
         return oidcLogoutSuccessHandler;
